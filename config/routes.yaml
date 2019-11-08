@@ -1,3 +1,21 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+#app_lucky_number:
+#  path: /lucky/number
+#  controller: App\Controller\LuckyController::number
+
+#controllers:
+#  resource: '../src/Controller/'
+#  type:     annotation
+
+index:
+  path: /
+  controller: App\Controller\ItemController::index
+
+create:
+  path: /create/{name}/{id_category}/{price}/{qty}
+  controller: App\Controller\ItemController::create
+
+move:
+  path: /move/{id}/{id_category}
+  controller: App\Controller\ItemController::move
+
+
