@@ -2,14 +2,24 @@
 
 namespace App\Controller;
 
-use App\AllClass\CreateItem;
-use App\AllClass\MoveItem;
+use App\Service\CreateItem;
+use App\Service\MoveItem;
+use App\Service\SendMailItem;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ItemController extends Controller
 {
+    private $createItem;
+    private $moveItem;
+
+    public function __construct(CreateItem $createItem, MoveItem $moveItem, SendMailItem $sendMailItem)
+    {
+         $this->createItem = $createItem;
+         $this->moveItem = $moveItem;
+         $this->sendMailItem = $sendMailItem;
+    }
 
     public function index()
     {
@@ -18,13 +28,13 @@ class ItemController extends Controller
 
     public function create($name, $id_category, $price, $qty)
     {
-        $params['name'] = $name;
-        $params['id_category'] = $id_category;
-        $params['price'] = $price;
-        $params['qty'] = $qty;
-        $createItem = new CreateItem($params);
-        $allCategory = $createItem->allCategory;
-        $allItem = $createItem->allItem;
+
+        $result = $this->createItem->create($name, $id_category, $price, $qty);
+        $allCategory = $this->createItem->allCategory;
+        $allItem = $this->createItem->allItem;
+        if($result){
+            $this->sendMailItem->sendMailCreateItem();
+        }
         return $this->render('item/create.html.twig', [
             'allItem' => $allItem,
             'allCategory' => $allCategory
@@ -33,11 +43,12 @@ class ItemController extends Controller
 
     public function move($id, $id_category)
     {
-        $params['id'] = $id;
-        $params['id_category'] = $id_category;
-        $moveItem = new MoveItem($params);
-        $allCategory = $moveItem->allCategory;
-        $allItem = $moveItem->allItem;
+        $result = $this->moveItem->move($id, $id_category);
+        $allCategory = $this->moveItem->allCategory;
+        $allItem = $this->moveItem->allItem;
+        if($result){
+            $this->sendMailItem->sendMailMoveItem();
+        }
         return $this->render('item/move.html.twig', [
             'allItem' => $allItem,
             'allCategory' => $allCategory

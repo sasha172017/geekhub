@@ -17,7 +17,7 @@
         {
             "id": "1",
             "name": "Laptop",
-            "id_category": "1",
+            "id_category": "3",
             "price": "5000",
             "qty": "2"
         },
