@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\AllClass;
+namespace App\Service;
 
 use App\Model\Database;
 

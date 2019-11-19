@@ -15,6 +15,6 @@ class Database
         $object = self::getDatabase();
         $object->item = $array;
         $jsonString = json_encode($object, JSON_PRETTY_PRINT);
-        file_put_contents(__DIR__ . "/../../data/database.json", $jsonString);
+        return file_put_contents(__DIR__ . "/../../data/database.json", $jsonString) ? true : null;
     }
 }
