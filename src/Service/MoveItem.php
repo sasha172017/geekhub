@@ -5,8 +5,9 @@ namespace App\Service;
 
 
 use App\Model\Database;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class MoveItem
+class MoveItem extends AbstractController
 {
     public $allCategory;
     public $allItem;
@@ -20,19 +21,12 @@ class MoveItem
     }
 
         public function move($id, $id_category){
-        if ($id && $id_category) {
-            $allCategory = $this->category->getCategory();
-            $allItem = $this->item->getItem();
-            foreach ($allItem as $item) {
-                if ($id == $item->id) {
-                    $item->id_category = $id_category;
-                    break;
-                }
+            if ($id && $id_category) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $item = $entityManager->getRepository(\App\Entity\Item::class)->find($id);
+                $item->setIdCategory($id_category);
+                $entityManager->flush();
             }
-            $result = Database::updateItemForDatabace($allItem);
-            $this->allCategory = $allCategory;
-            $this->allItem = $this->item->getItem();
-            return $result ? true : null;
+            return true;
         }
-    }
 }
