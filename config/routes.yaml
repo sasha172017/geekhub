@@ -18,4 +18,6 @@ move:
   path: /move/{id}/{id_category}
   controller: App\Controller\ItemController::move
 
-
+show:
+  path: /item/{id}
+  controller: App\Controller\ItemController::show
