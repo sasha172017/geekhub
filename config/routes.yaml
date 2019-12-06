@@ -8,16 +8,21 @@
 
 index:
   path: /
-  controller: App\Controller\ItemController::index
+  controller: App\Controller\ProductController::index
 
 create:
-  path: /create/{name}/{id_category}/{price}/{qty}
-  controller: App\Controller\ItemController::create
+  path: /create
+  controller: App\Controller\ProductController::create
 
-move:
-  path: /move/{id}/{id_category}
-  controller: App\Controller\ItemController::move
+createUser:
+  path: /createuser
+  controller: App\Controller\ProductController::createUser
+
+
+product:
+  path: /product
+  controller: App\Controller\ProductController::product
 
 show:
-  path: /item/{id}
-  controller: App\Controller\ItemController::show
+  path: /product/{id}
+  controller: App\Controller\ProductController::show

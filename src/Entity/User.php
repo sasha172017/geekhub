@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class Category
+class User
 {
     /**
      * @ORM\Id()
@@ -24,7 +24,12 @@ class Category
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category")
+     * @ORM\Column(type="string", length=255)
+     */
+    private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="user")
      */
     private $products;
 
@@ -50,6 +55,18 @@ class Category
         return $this;
     }
 
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Product[]
      */
@@ -62,7 +79,7 @@ class Category
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->setCategory($this);
+            $product->setUser($this);
         }
 
         return $this;
@@ -73,8 +90,8 @@ class Category
         if ($this->products->contains($product)) {
             $this->products->removeElement($product);
             // set the owning side to null (unless already changed)
-            if ($product->getCategory() === $this) {
-                $product->setCategory(null);
+            if ($product->getUser() === $this) {
+                $product->setUser(null);
             }
         }
 
