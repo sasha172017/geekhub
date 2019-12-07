@@ -22,6 +22,7 @@ class ProductRepository extends ServiceEntityRepository
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */
+
     /*
     public function findByExampleField($value)
     {

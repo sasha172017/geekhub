@@ -29,7 +29,7 @@ class User
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="user")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Product", mappedBy="user")
      */
     private $products;
 
@@ -37,6 +37,7 @@ class User
     {
         $this->products = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {

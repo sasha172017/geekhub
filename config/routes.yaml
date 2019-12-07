@@ -14,15 +14,3 @@ create:
   path: /create
   controller: App\Controller\ProductController::create
 
-createUser:
-  path: /createuser
-  controller: App\Controller\ProductController::createUser
-
-
-product:
-  path: /product
-  controller: App\Controller\ProductController::product
-
-show:
-  path: /product/{id}
-  controller: App\Controller\ProductController::show
