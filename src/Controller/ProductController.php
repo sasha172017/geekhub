@@ -28,7 +28,8 @@ class ProductController extends AbstractController
     public function index()
     {
 
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $products = $this->getDoctrine()->getRepository(Product::class)->findAllOnSale();
+//        $products = $this->getDoctrine()->getRepository(Product::class)->find(8)->getCreatedAt()->format('d-M-Y');
         return $this->render('product/index.html.twig', [
                 'products' => $products
             ]);
@@ -39,7 +40,6 @@ class ProductController extends AbstractController
     {
         $product = new Product();
         $product->setName('Product New');
-//        $product->setCategory($this->getDoctrine()->getRepository(Category::class)->find(mt_rand(1, 5)));
         $product->setQty(1);
         $product->setPrice(2.5);
         $form = $this->createForm(ProductType::class, $product);
@@ -54,9 +54,13 @@ class ProductController extends AbstractController
                         $this->getParameter('image_product_directory'),
                         $newImageName
                     );
+                $product->setImageName($newImageName);
+            }elseif(!$imageFile){
+                $product->setImageName('notimage.png');
             }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
+            $product->setCreatedAt(new \DateTime('now'));
             $entityManager->flush();
             $this->addFlash('success', 'Product Created!');
         }

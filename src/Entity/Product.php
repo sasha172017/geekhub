@@ -26,6 +26,7 @@ class Product
     private $name;
 
     /**
+     * @Assert\NotBlank
      * @ORM\Column(type="float")
      */
     private $price;
@@ -51,9 +52,34 @@ class Product
      */
     private $imageName;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @Assert\DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @Assert\DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @Assert\DateTime
+     * @Assert\GreaterThan("today", message="Field Go On Sale should be greater than today")
+     */
+    private $goOnSale;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="favoriteProducts")
+     */
+    private $usersLiked;
+
     public function __construct()
     {
         $this->user = new ArrayCollection();
+        $this->usersLiked = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +169,70 @@ class Product
     public function setImageName(?string $imageName): self
     {
         $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getGoOnSale(): ?\DateTimeInterface
+    {
+        return $this->goOnSale;
+    }
+
+    public function setGoOnSale(?\DateTimeInterface $goOnSale): self
+    {
+        $this->goOnSale = $goOnSale;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsersLiked(): Collection
+    {
+        return $this->usersLiked;
+    }
+
+    public function addUsersLiked(User $usersLiked): self
+    {
+        if (!$this->usersLiked->contains($usersLiked)) {
+            $this->usersLiked[] = $usersLiked;
+            $usersLiked->addFavoriteProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsersLiked(User $usersLiked): self
+    {
+        if ($this->usersLiked->contains($usersLiked)) {
+            $this->usersLiked->removeElement($usersLiked);
+            $usersLiked->removeFavoriteProduct($this);
+        }
 
         return $this;
     }
