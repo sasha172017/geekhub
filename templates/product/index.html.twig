@@ -1,27 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>index</title>
-</head>
-<body>
-
-<table border="1">
-    <tr><td><b>ID</b></td><td><b>Name</b></td><td><b>Category</b></td><td><b>Price</b></td><td><b>Qty</b></td></tr>
-
-    {% for category in categories %}
-        {% for product in products %}
-            {% if category.getId() == product.Category.getId() %}
-                <tr>
-                    <td>{{ product.id }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.Category.name }}</td>
-                    <td>{{ product.price }}</td><td>
-                    </td><td>{{ product.qty }}</td>
-                </tr>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-    <table>
-</body>
-</html>
+{% extends 'base.html.twig' %}
+{% block title %}Products{% endblock %}
+    {% block body %}
+        <div class="container">
+                <h1>Product list</h1>
+            <div class="row">
+                {% for product in products %}
+                <div class="card text-dark mb-3" style="max-width: 18rem; margin-left:20px;">
+                    <img class="" width="250" src="{{ asset('/uploads/images/product/' ~ product.imageName) }}" alt="Card image cap" >
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">Price: {{ product.price }}</p>
+                        <p class="card-text">Qty: {{ product.qty }}</p>
+                        <p class="text-success">Date Created: {{ product.createdAt()|date('d M Y') }}</p>
+                        <p class="card-text">Category: {{ product.getCategory().getName() }}</p>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <a href="{{ url("userLikeProduct", {'id': product.id}, false) }}" class="btn btn-outline-primary">Like</a>
+{#                            {% if product.getUsersLiked().isEmpty() %}#}
+{#                                <a href="{{ url("userLikeProduct", {'id': product.id}, false) }}" class="btn btn-outline-primary">Like</a>#}
+{#                            {% else %}#}
+{#                                {% for userLiked in product.usersLiked %}#}
+{#                                    {% if userLiked.id != app.user.id %}#}
+{#                                        <a href="{{ url("userLikeProduct", {'id': product.id}, false) }}" class="btn btn-outline-primary">Like</a>#}
+{#                                    {% else %}#}
+{#                                        <a class="btn btn-outline-success disabled">Like</a>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endblock %}
