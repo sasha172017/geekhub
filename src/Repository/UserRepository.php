@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Product;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -19,24 +18,6 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
-
-
-//    public function getUserFavoriteForDelete($idUser, $idFavoriteUser)
-//    {
-//        return $this->createQueryBuilder('u')
-////            ->select()
-//            ->from(Product::class, 'p')
-////            ->innerJoin('u.user_user')
-////            ->join(Product::class, 'p', 'WITH', 'p.id = :idFavoriteUser')
-//            ->where('u.id = :idUser')
-//            ->setParameters([
-//                'idUser' => $idUser,
-////                'idFavoriteUser' => $idFavoriteUser
-//            ])
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//            ;
-//    }
 
     // /**
     //  * @return User[] Returns an array of User objects

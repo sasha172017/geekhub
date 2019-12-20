@@ -1,3 +1,7 @@
+#app_lucky_number:
+#  path: /lucky/number
+#  controller: App\Controller\LuckyController::number
+
 #controllers:
 #  resource: '../src/Controller/'
 #  type:     annotation
@@ -6,48 +10,19 @@ index:
   path: /
   controller: App\Controller\ProductController::index
 
-productCreate:
-  path: /product/create
+create:
+  path: /create
   controller: App\Controller\ProductController::create
 
-productList:
+createUser:
+  path: /createuser
+  controller: App\Controller\ProductController::createUser
+
+
+product:
   path: /product
-  controller: App\Controller\ProductController::index
+  controller: App\Controller\ProductController::product
 
-
-userRegister:
-  path: /user/register
-  controller: App\Controller\UserController::register
-
-userFavoriteProduct:
-  path: /user/favorite/product
-  controller: App\Controller\UserController::favoriteProduct
-
-userIndex:
-  path: /user
-  controller: App\Controller\UserController::index
-
-userFavoriteUser:
-  path: /user/favorite/user
-  controller: App\Controller\UserController::favoriteUser
-
-
-userFavoriteUserDelete:
-  path: /user/favorite/user/delete/{idFavoriteUser}
-  controller: App\Controller\UserController::favoriteUserDelete
-
-userLikeUser:
-    path: /user/like/user/{id}
-    controller: App\Controller\UserController::likeUser
-
-userLikeProduct:
-    path: /user/like/product/{id}
-    controller: App\Controller\UserController::likeProduct
-
-app_login:
-  path: /login
-  controller: App\Controller\SecurityController::login
-
-app_logout:
-  path: /logout
-  controller: App\Controller\SecurityController::logout
+show:
+  path: /product/{id}
+  controller: App\Controller\ProductController::show

@@ -22,19 +22,6 @@ class ProductRepository extends ServiceEntityRepository
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */
-
-
-
-    public function findAllOnSale()
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.goOnSale <= :dateNow')
-            ->setParameter('dateNow', new \DateTime('now'))
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
     /*
     public function findByExampleField($value)
     {
