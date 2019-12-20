@@ -26,7 +26,7 @@
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.age }}</td>
                                 <td>{{ user.male }}</td>
-                                <td><a href="{{ url("userFavoriteUserDelete", {'idUser': id, 'idFavoriteUser': user.id}, false) }}">delete</a></td>
+                                <td><a href="{{ url("userFavoriteUserDelete", {'idFavoriteUser': user.id}, false) }}">delete</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>

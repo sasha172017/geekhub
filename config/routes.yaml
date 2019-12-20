@@ -14,25 +14,26 @@ productList:
   path: /product
   controller: App\Controller\ProductController::index
 
+
 userRegister:
   path: /user/register
   controller: App\Controller\UserController::register
 
 userFavoriteProduct:
-  path: /user/favorite/product/{id}
+  path: /user/favorite/product
   controller: App\Controller\UserController::favoriteProduct
 
 userIndex:
-  path: /user/
+  path: /user
   controller: App\Controller\UserController::index
 
 userFavoriteUser:
-  path: /user/favorite/user/{id}
+  path: /user/favorite/user
   controller: App\Controller\UserController::favoriteUser
 
 
 userFavoriteUserDelete:
-  path: /user/favorite/user/delete/{idUser}/{idFavoriteUser}
+  path: /user/favorite/user/delete/{idFavoriteUser}
   controller: App\Controller\UserController::favoriteUserDelete
 
 userLikeUser:
@@ -43,3 +44,10 @@ userLikeProduct:
     path: /user/like/product/{id}
     controller: App\Controller\UserController::likeProduct
 
+app_login:
+  path: /login
+  controller: App\Controller\SecurityController::login
+
+app_logout:
+  path: /logout
+  controller: App\Controller\SecurityController::logout

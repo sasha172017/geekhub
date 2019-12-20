@@ -11,17 +11,17 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        for ($i = 1; $i <= 30; $i++) {
-            $user = new User();
-            $user->setName('user' . $i);
-            $user->setPassword(md5($i));
-            $user->setMale(mt_rand(0, 1));
-            $user->setTarget(mt_rand(0, 1));
-            $date = new \DateTime();
-            $user->setDateOfBirth($date->setDate(mt_rand(1990, 2005), mt_rand(1, 12), mt_rand(1, 28)));
-            $manager->persist($user);
-        }
-        $manager->flush();
+//        for ($i = 1; $i <= 30; $i++) {
+//            $user = new User();
+//            $user->setName('user' . $i);
+//            $user->setPassword(md5($i));
+//            $user->setMale(mt_rand(0, 1));
+//            $user->setTarget(mt_rand(0, 1));
+//            $date = new \DateTime();
+//            $user->setDateOfBirth($date->setDate(mt_rand(1990, 2005), mt_rand(1, 12), mt_rand(1, 28)));
+//            $manager->persist($user);
+//        }
+//        $manager->flush();
 
 
     }

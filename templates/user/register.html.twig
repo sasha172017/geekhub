@@ -18,7 +18,7 @@
                     {% endfor %}
 
 
-{#                    {% if formIsSubmitter == false %}#}
+                    {% if formIsSubmitter == false %}
                         {% for error in errors %}
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {{ error.message }}
@@ -28,12 +28,13 @@
                         </div>
                         {% endfor %}
                     {{ form_start(form) }}
-{#                    {{ form_errors(form) }}#}
-
                     <div class="form-group">
-                        {{ form_label(form.username) }}
-                        {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_help(form.username) }}
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.name) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
                     </div>
                     <div class="form-group">
                         {{ form_label(form.plainPassword.first) }}
@@ -57,7 +58,7 @@
 
                     <button type="submit" class="btn btn-outline-primary">REGISTER</button>
                     {{ form_end(form) }}
-{#                    {% endif %}#}
+                    {% endif %}
                 </div>
             </div>
         </div>

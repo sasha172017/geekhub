@@ -27,9 +27,7 @@ class ProductController extends AbstractController
 
     public function index()
     {
-
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllOnSale();
-//        $products = $this->getDoctrine()->getRepository(Product::class)->find(8)->getCreatedAt()->format('d-M-Y');
         return $this->render('product/index.html.twig', [
                 'products' => $products
             ]);

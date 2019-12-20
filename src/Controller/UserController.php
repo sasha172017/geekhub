@@ -23,34 +23,29 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function register(UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator){
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, ValidatorInterface $validator){
         $user = new User();
-        $errors = null;
         $form = $this->createForm(UserRegisterType::class, $user);
-        $form->handleRequest(Request::createFromGlobals());
+        $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $errors = $validator->validate($user);
-            if ($form->isValid()){
-                $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-                $user->setPassword($password);
-                $user->setTarget(0);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-
-            }
+            $user->setPassword($passwordEncoder->encodePassword($user, $user->getPlainPassword()));
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $this->addFlash('success', 'You  Registered');
         }
+//        $a = get_class_methods($validator);
         return $this->render('user/register.html.twig', [
+            'formIsSubmitter' => $form->isSubmitted() && $form->isValid(),
             'form' => $form->createView(),
-            'errors' => $errors
+            'errors' => $validator->validate($form)
         ]);
     }
 
     public function likeUser($id){
-        $idUser = 21;
-        $user = $this->getDoctrine()->getRepository(User::class)->find($idUser);
+        $user = $this->getUser();
         $userLike = $this->getDoctrine()->getRepository(User::class)->find($id);
-        if (!$userLike) {
+        if (!$user || !$userLike) {
             throw $this->createNotFoundException(
                 'error'
             );
@@ -65,16 +60,14 @@ class UserController extends AbstractController
     }
 
     public function likeProduct($id){
-        $idUser = 21;
-        $user = $this->getDoctrine()->getRepository(User::class)->find($idUser);
+        $user = $this->getUser();
         $likeProduct = $this->getDoctrine()->getRepository(Product::class)->find($id);
-        if (!$likeProduct) {
+        if (!$user || !$likeProduct) {
             throw $this->createNotFoundException(
                 'error'
             );
         }
         $em = $this->getDoctrine()->getManager();
-//        $user->addFavo
         $user->addFavoriteProduct($likeProduct);
         $em->persist($user);
         $em->flush();
@@ -83,26 +76,24 @@ class UserController extends AbstractController
         return $this->redirect($url);
     }
 
-    public function favoriteProduct($id)
+    public function favoriteProduct()
     {
 
         return $this->render('user/favoriteProduct.html.twig', [
-            'products' => $this->getDoctrine()->getRepository(User::class)->find($id)->getFavoriteProducts(),
+            'products' => $this->getUser()->getFavoriteProducts(),
         ]);
     }
 
-    public function favoriteUser($id)
+    public function favoriteUser()
     {
-
         return $this->render('user/favoriteUser.html.twig', [
-            'id' => $id,
-            'users' => $this->getDoctrine()->getRepository(User::class)->find($id)->getFavoriteUsers(),
+            'users' => $this->getUser()->getFavoriteUsers(),
         ]);
     }
 
-    public function favoriteUserDelete($idUser, $idFavoriteUser)
+    public function favoriteUserDelete($idFavoriteUser)
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->find($idUser);
+        $user = $this->getUser();
         $favoriteUser = $this->getDoctrine()->getRepository(User::class)->find($idFavoriteUser);
         if (!$user && !$favoriteUser) {
             throw $this->createNotFoundException(

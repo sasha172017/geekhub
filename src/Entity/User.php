@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields="email", message="user.email.taken")
  */
 class User implements UserInterface
 {
@@ -21,32 +23,51 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255,   unique=true)
-     * @Assert\NotBlank
-     *      @Assert\Length(
-     *      min = 4,
-     *      max = 15,
-     *      minMessage = "user.username.MinLength",
-     *      maxMessage = "user.username.MaxLength"
-     * )
+     * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email()
      */
-    private $username;
+    private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
     private $password;
 
     /**
      * @Assert\NotBlank()
-     *      @Assert\Length(
+     * @Assert\Length(
      *      min = 6,
-     *      max = 25,
+     *      max = 20,
      *      minMessage = "user.plainPassword.MinLength",
      *      maxMessage = "user.plainPassword.MaxLength"
      * )
+     *  @Assert\Regex(
+     *     pattern     = "/^[a-z]+$/i",
+     *     htmlPattern = "^[a-zA-Z]+$",
+     *     message = "user.plainPassword.regex"
+     * )
      */
     private $plainPassword;
+
+    /**
+     * @ORM\Column(type="string", length=255,   unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 15,
+     *      minMessage = "user.name.MinLength",
+     *      maxMessage = "user.name.MaxLength"
+     * )
+
+     */
+    private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Product", mappedBy="user")
@@ -56,25 +77,19 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="date",  nullable=true)
      * @Assert\NotBlank
+     * @Assert\Date
      */
     private $dateOfBirth;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
+     * @Assert\Type(
+     *     type="integer",
+     *     message="user.male.type"
+     * )
      */
     private $male;
-
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $roles;
-
-
-    /**
-     * @ORM\Column(type="integer", options={"default" : 0})
-     */
-    private $target;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Product", inversedBy="usersLiked")
@@ -106,38 +121,16 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getName(): ?string
     {
-        return $this->username;
+        return $this->name;
     }
 
-    public function setUsername(string $username): self
+    public function setName(string $name): self
     {
-        $this->username = $username;
+        $this->name = $name;
 
         return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
-
-    public function setPlainPassword($password)
-    {
-        $this->plainPassword = $password;
     }
 
     /**
@@ -171,7 +164,8 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getAge(){
+    public function getAge()
+    {
         $now = new \DateTime('now');
         $age = $this->getDateOfBirth();
         $difference = $now->diff($age);
@@ -190,7 +184,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getMale(): ?int
+    public function getMale()
     {
         return $this->male;
     }
@@ -202,16 +196,89 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getTarget(): ?int
+    public function getEmail(): ?string
     {
-        return $this->target;
+        return $this->email;
     }
 
-    public function setTarget(int $target): self
+    public function setEmail(string $email): self
     {
-        $this->target = $target;
+        $this->email = $email;
 
         return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): string
+    {
+        return (string) $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
 
@@ -293,30 +360,5 @@ class User implements UserInterface
         }
 
         return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRoles()
-    {
-        return $this->roles;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getSalt()
-    {
-        return null;
-        // TODO: Implement getSalt() method.
-    }
-
-
-
-
-    public function eraseCredentials()
-    {
-        // TODO: Implement eraseCredentials() method.
     }
 }
