@@ -39,6 +39,17 @@
 
 
                         <div class="form-group">
+                            {{ form_label(form.createdAt) }}
+                            {{ form_widget(form.createdAt)  }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.goOnSale) }}
+                            {{ form_widget(form.goOnSale)  }}
+                        </div>
+
+
+                        <div class="form-group">
                         {{ form_label(form.price) }}
 {#                        {{ form_errors(form.price) }}#}
                         {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}

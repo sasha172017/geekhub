@@ -2,36 +2,34 @@
 {% block title %}Products{% endblock %}
     {% block body %}
         <div class="container">
+                <h1>Product list</h1>
             <div class="row">
-                <div class="col-12">
-                    <h1 class="text-center">List Product</h1>
-                    <table class="table">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Image</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Qty</th>
-                            <th scope="col">Category</th>
-{#                            <th scope="col">Users</th>#}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for product in products %}
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>{{ product.name }}</td>
-                            <td>{{ product.imageName }}</td>
-                            <td>{{ product.price }}</td>
-                            <td>{{ product.qty }}</td>
-                            <td>{{ product.getCategory().getName() }}</td>
-{#                            <td>@mdo</td>#}
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                {% for product in products %}
+                <div class="card text-dark mb-3" style="max-width: 18rem; margin-left:20px;">
+                    <img class="" width="250" src="{{ asset('/uploads/images/product/' ~ product.imageName) }}" alt="Card image cap" >
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">Price: {{ product.price }}</p>
+                        <p class="card-text">Qty: {{ product.qty }}</p>
+                        <p class="text-success">Date Created: {{ product.createdAt()|date('d M Y') }}</p>
+                        <p class="card-text">Category: {{ product.getCategory().getName() }}</p>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <a href="{{ url("userLikeProduct", {'id': product.id}, false) }}" class="btn btn-outline-primary">Like</a>
+{#                            {% if product.getUsersLiked().isEmpty() %}#}
+{#                                <a href="{{ url("userLikeProduct", {'id': product.id}, false) }}" class="btn btn-outline-primary">Like</a>#}
+{#                            {% else %}#}
+{#                                {% for userLiked in product.usersLiked %}#}
+{#                                    {% if userLiked.id != app.user.id %}#}
+{#                                        <a href="{{ url("userLikeProduct", {'id': product.id}, false) }}" class="btn btn-outline-primary">Like</a>#}
+{#                                    {% else %}#}
+{#                                        <a class="btn btn-outline-success disabled">Like</a>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+                        {% endif %}
+                    </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     {% endblock %}

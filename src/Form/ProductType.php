@@ -7,6 +7,7 @@ use App\Entity\Product;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -41,13 +42,22 @@ class ProductType extends AbstractType
 //                    ])
                 ],
             ])
+            ->add('createdAt', DateType::class, [
+                'format' => 'dd - MM - yyyy',
+                'disabled' => true,
+                'data' => new \DateTime('now')
+            ])
+            ->add('goOnSale', DateType::class, [
+                'format' => 'dd - MM - yyyy',
+                'data' => new \DateTime('tomorrow')
+            ])
             ->add('qty', null, [
                 'attr' => array('autocomplete' => 'off'),
             ])
             ->add('category', EntityType::class, ['class' => Category::class, 'choice_label' => 'name'])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'name',
+                'choice_label' => 'username',
                  'multiple' => true,
 //                 'expanded' => true,
             'required' => false
