@@ -3,6 +3,7 @@
     {% block body %}
         <div class="container">
                 <h1>Product list</h1>
+            {% if friday() %}
             <div class="row">
                 {% for product in products %}
                 <div class="card text-dark mb-3" style="max-width: 18rem; margin-left:20px;">
@@ -15,21 +16,11 @@
                         <p class="card-text">Category: {{ product.getCategory().getName() }}</p>
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <a href="{{ url("userLikeProduct", {'id': product.id}, false) }}" class="btn btn-outline-primary">Like</a>
-{#                            {% if product.getUsersLiked().isEmpty() %}#}
-{#                                <a href="{{ url("userLikeProduct", {'id': product.id}, false) }}" class="btn btn-outline-primary">Like</a>#}
-{#                            {% else %}#}
-{#                                {% for userLiked in product.usersLiked %}#}
-{#                                    {% if userLiked.id != app.user.id %}#}
-{#                                        <a href="{{ url("userLikeProduct", {'id': product.id}, false) }}" class="btn btn-outline-primary">Like</a>#}
-{#                                    {% else %}#}
-{#                                        <a class="btn btn-outline-success disabled">Like</a>#}
-{#                                    {% endif %}#}
-{#                                {% endfor %}#}
-{#                            {% endif %}#}
                         {% endif %}
                     </div>
                 </div>
                 {% endfor %}
             </div>
+            {% endif %}
         </div>
     {% endblock %}
